@@ -16,16 +16,13 @@ class UserBase(BaseModel):
 app = FastAPI(lifespan=lifespan)
 
 
-@app.post("/users/")
-def add_user(user: UserBase,session: Session = Depends(get_session)):
-    #we need to check if the email already exist
-    to_check = session.get(User,user.email)
-    if not to_check:
-        toadd = User(name = user.name, email = user.email)
-        session.add(toadd)
-        session.commit()
-        session.refresh(toadd)
-        return toadd
-    else:
-        raise HTTPException(status_code=409, detail="email already exists")
 
+
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int, session: Session = Depends(get_session)):
+    to_delete = session.get(User, user_id)
+    if to_delete:
+        session.delete(to_delete)
+        session.commit()
+    else:
+        raise HTTPException(status_code=404, detail="user not found")
