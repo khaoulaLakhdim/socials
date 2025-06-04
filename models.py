@@ -4,6 +4,7 @@ from typing import List
 class user_post(SQLModel, table= True):
     author_id: int = Field(foreign_key="user.id", primary_key= True)
     post_id: int = Field(foreign_key="post.id", primary_key= True)
+    
 
 class User(SQLModel, table= True):
     id: int | None = Field(default= None, primary_key=True)
