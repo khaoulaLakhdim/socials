@@ -64,3 +64,13 @@ def update_user(user_id : int, data : UserUpdate, session : Session = Depends(ge
 
 
 #delete users
+
+
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int, session: Session = Depends(get_session)):
+    to_delete = session.get(User, user_id)
+    if to_delete:
+        session.delete(to_delete)
+        session.commit()
+    else:
+        raise HTTPException(status_code=404, detail="user not found")
